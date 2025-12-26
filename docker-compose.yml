@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  # Base de données PostGIS
+  db:
+    image: postgis/postgis:15-3.3
+    container_name: sead_db_container
+    environment:
+      - POSTGRES_DB=sead_db
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=admin
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  # Backend Django
+  backend:
+    build: ./backend
+    container_name: sead_backend_container
+    volumes:
+      - ./backend:/app
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgres://postgres:admin@db:5432/sead_db
+    depends_on:
+      - db
+
+  # Frontend React (Interne)
+  frontend:
+    build: ./frontend
+    container_name: sead_frontend_container
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:
