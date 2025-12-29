@@ -1,0 +1,111 @@
+.login-container {
+    height: 100vh;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* On remonte de Login vers pages (../) puis vers src (../) */
+    background-image: url('../../assets/bg.png'); 
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    font-family: Arial, sans-serif;
+}
+
+/* Le reste du CSS ne change pas ... */
+.login-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.login-card {
+    position: relative;
+    z-index: 10;
+    width: 450px;
+    padding: 40px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 25px;
+    text-align: center;
+    color: white;
+}
+
+.crest-logo {
+    width: 80px;
+    margin-bottom: 10px;
+}
+
+.login-title {
+    color: #3498db;
+    font-size: 24px;
+    text-transform: uppercase;
+    margin-bottom: 5px;
+}
+
+.login-subtitle {
+    font-size: 14px;
+    margin-bottom: 30px;
+}
+
+.input-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 25px;
+    border-bottom: 1px solid #ccc;
+}
+
+.input-group label {
+    width: 120px;
+    text-align: left;
+    font-size: 14px;
+}
+
+.input-group input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: white;
+    padding: 8px;
+    outline: none;
+}
+
+.login-button {
+    width: 100%;
+    padding: 12px;
+    background-color: #0070ad;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.forgot-password {
+    display: block;
+    margin-top: 20px;
+    color: white;
+    text-decoration: none;
+    font-size: 13px;
+}
+
+.footer-logo {
+    position: absolute;
+    bottom: 20px;
+    left: 30px;
+    text-align: center;
+}
+
+.footer-logo img {
+    width: 50px;
+}
+
+.footer-logo span {
+    display: block;
+    color: #3498db;
+    font-weight: bold;
+    font-size: 12px;
+    letter-spacing: 2px;
+}

@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'apps.authentication',
     'apps.foncier',
     'apps.analytics',
+    'apps.agri_market',
 ]
 
 MIDDLEWARE = [
