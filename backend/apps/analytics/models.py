@@ -1,21 +1,19 @@
 from django.contrib.gis.db import models # Indispensable pour le shapefile
 
 class Decoupage(models.Model):
-    # Attributs du MCD
-    provinces = models.CharField(max_length=100)
-    cod_provinc = models.CharField(max_length=10)
-    communes = models.CharField(max_length=100)
-    ccod_commun = models.CharField(max_length=10)
-    zones = models.CharField(max_length=100)
-    ccod_zones = models.CharField(max_length=10)
-    type_zone = models.CharField(max_length=50) # 'TYPE' dans le MCD
-    colqtr = models.CharField(max_length=100)
-    ccodcolqtr = models.CharField(max_length=20, unique=True)
-    
-    # Champ pour importer ton Shapefile (Multipolygon)
-    geom = models.MultiPolygonField(srid=4326) 
+    provinces = models.CharField(max_length=100, null=True, blank=True)
+    cod_provinc = models.CharField(max_length=10, null=True, blank=True)
+    communes = models.CharField(max_length=100, null=True, blank=True)
+    ccod_commun = models.CharField(max_length=10, null=True, blank=True)
+    zones = models.CharField(max_length=100, null=True, blank=True)
+    ccod_zones = models.CharField(max_length=10, null=True, blank=True)
+    type_zone = models.CharField(max_length=50, null=True, blank=True) 
+    colqtr = models.CharField(max_length=100, null=True, blank=True)
+    ccodcolqtr = models.CharField(max_length=20, null=True, blank=True) # Retirer unique=True ici si plusieurs zones n'ont pas de code
+    geom = models.GeometryField(srid=4326)
 
-    def __str__(self): return f"{self.colqtr} ({self.communes})"
+    def __str__(self):
+        return self.colqtr if self.colqtr else "Zone sans nom"
 
 class CompagneAgricole(models.Model):
     annee = models.IntegerField()
