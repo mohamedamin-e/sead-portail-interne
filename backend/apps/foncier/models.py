@@ -9,12 +9,14 @@ class Parcelle(gis_models.Model):
     code = gis_models.CharField(max_length=50, unique=True)
     # Champ SIG pour les parcelles individuelles
     geom = gis_models.PolygonField(srid=4326) 
+    surface_culture_ha = gis_models.FloatField(default=0.0) # Pour A7
+    est_securisee = gis_models.BooleanField(default=False) # Pour A15
     
     # Attributs MCD
     usg_parcelle = gis_models.CharField(max_length=100)
     secu_droit = gis_models.CharField(max_length=100)
-    expl_comm = gis_models.BooleanField()
-    int_comm = gis_models.BooleanField()
+    expl_comm = gis_models.BooleanField(default=False) # <--- RÉPARÉ
+    int_comm = gis_models.BooleanField(default=False) 
     voisin_nord = gis_models.CharField(max_length=255)
     voisin_sud = gis_models.CharField(max_length=255)
     voisin_est = gis_models.CharField(max_length=255)
@@ -22,6 +24,7 @@ class Parcelle(gis_models.Model):
     
     menage = gis_models.ForeignKey('analytics.Menage', on_delete=gis_models.CASCADE)
     phase_actuelle = gis_models.ForeignKey(PhaseParcelle, on_delete=gis_models.PROTECT, null=True)
+    decoupage = gis_models.ForeignKey('analytics.Decoupage', on_delete=gis_models.SET_NULL, null=True, blank=True)
 
 class Culture(gis_models.Model):
     parcelle = gis_models.ForeignKey(Parcelle, on_delete=gis_models.CASCADE)

@@ -40,10 +40,11 @@ INSTALLED_APPS = [
     'corsheaders',        # Pour autoriser React à parler à Django
 
     # Tes Applications locales
-    'apps.authentication',
-    'apps.foncier',
-    'apps.analytics',
-    'apps.agri_market',
+    'authentication',
+    'foncier',
+    'analytics',
+    'agri_market',
+    'drf_spectacular',
 ]
 
 MIDDLEWARE = [
@@ -128,15 +129,71 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Configuration de Django Rest Framework
 REST_FRAMEWORK = {
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
     ],
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.SessionAuthentication',
-        'rest_framework.authentication.BasicAuthentication',
-    ],
+    'DEFAULT_RENDERER_CLASSES': ('core.renderers.SEADRenderer',
+                                 'rest_framework.renderers.BrowsableAPIRenderer'),
+    'EXCEPTION_HANDLER': 'core.exceptions.sead_exception_handler',
+
 }
 
+# 3. Paramètres de la documentation (Titre, Description, etc.)
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Portail Interne SEAD - API Documentation',
+    'DESCRIPTION': 'Système de Suivi-Évaluation Automatisé et Décentralisé (Digitalisation du Foncier et de l’Agriculture au Burundi).',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+    # Ajoute le bouton "Authorize" pour tester les API protégées par JWT
+    
+    'COMPONENT_SPLIT_PATCH': True,
+    'SWAGGER_UI_SETTINGS': {
+        'deepLinking': True,
+        'defaultModelRendering': 'model',
+        'displayRequestDuration': True,
+    },
+    
+    'APPEND_COMPONENTS': {
+        "securitySchemes": {
+            "jwtAuth": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT",
+            }
+        }
+    },
+    'SECURITY': [{"jwtAuth": []}],
+}
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Autorise localhost et l'IP de docker
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', '0.0.0.0']
+from datetime import timedelta
+
+# ...
+
+SIMPLE_JWT = {
+    # Durée de validité du token d'accès (le "Bearer")
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=1), # Changé de 5 min à 1 jour
+    
+    # Durée de validité du token de rafraîchissement
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7), # 1 semaine
+    
+    'ROTATE_REFRESH_TOKENS': False,
+    'BLACKLIST_AFTER_ROTATION': True,
+    'UPDATE_LAST_LOGIN': True,
+
+    'ALGORITHM': 'HS256',
+    'SIGNING_KEY': SECRET_KEY,
+    'VERIFYING_KEY': None,
+    'AUDIENCE': None,
+    'ISSUER': None,
+
+    'AUTH_HEADER_TYPES': ('Bearer',),
+    'AUTH_HEADER_NAME': 'HTTP_AUTHORIZATION',
+    'USER_ID_FIELD': 'id',
+    'USER_ID_CLAIM': 'user_id',
+}

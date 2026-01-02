@@ -1,5 +1,8 @@
-django
+Django==5.2.9
 djangorestframework
-djangorestframework-gis
 django-cors-headers
+djangorestframework-gis
+djangorestframework-simplejwt
 psycopg2-binary
+django-filter
+drf-spectacular

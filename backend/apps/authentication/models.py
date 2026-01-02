@@ -35,3 +35,18 @@ class JournalAction(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.type_action} - {self.date}"
+    
+
+#begin of the api design 
+class LogActivite(models.Model):
+    action = models.CharField(max_length=50) # creation, modification, suppression, export
+    module = models.CharField(max_length=50) # exploitants, foncier, market...
+    ressource_type = models.CharField(max_length=50) # ex: 'Parcelle'
+    ressource_id = models.CharField(max_length=50)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    details = models.JSONField(null=True) # { "avant": {"A27": 20}, "apres": {"A27": 25} }
+    ip_address = models.GenericIPAddressField(null=True, blank=True)
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name_plural = "Logs d'activité"
